@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using MyFund.Infrastructure.Enums;
 using MyFund.Infrastructure.Events;
@@ -27,7 +28,7 @@ namespace MyFund.Modules.Stock.Tests.Services
         }
 
         [Test]
-        public void AddFirstEquityStock()
+        public void AddFirstEquityStockSuccess()
         {
             var request = new BaseStockModel()
             {
@@ -51,7 +52,7 @@ namespace MyFund.Modules.Stock.Tests.Services
         }
 
         [Test]
-        public void AddTwoStocks()
+        public void AddTwoStocksSuccess()
         {
             var request0 = new BaseStockModel()
             {
@@ -71,13 +72,117 @@ namespace MyFund.Modules.Stock.Tests.Services
 
             var allStocks = _fundService.AllStocks().ToArray();
 
-            _eventAggregatorMock.VerifyGetEvent(2);
-            _fundChangedEventMock.VerifyPublishEvent(2);
+            AssertEvents(2);
 
-            Assert.That(allStocks.Count(), Is.EqualTo(2));
+            AssertStocksLength(allStocks, 2);
             Assert.That(allStocks.Count(s => s.Type == request0.Type && s.Quantity == request0.Quantity && s.Price == request0.Price), Is.EqualTo(1));
             Assert.That(allStocks.Count(s => s.Type == request1.Type && s.Quantity == request1.Quantity && s.Price == request1.Price), Is.EqualTo(1));
-            Assert.That(allStocks[0].TotalMarketValue, Is.EqualTo(request0.Price * request0.Quantity + request1.Price * request1.Quantity));
+            AssertTotalMarketValueInStock(allStocks[0], new[] { request0, request1 });
+        }
+
+        [Test]
+        public void AddThreeStocksCheckTotalsNumberSuccess()
+        {
+            var request0 = new BaseStockModel()
+            {
+                Price = 1,
+                Quantity = 1,
+                Type = StockType.Equity
+            };
+            var request1 = new BaseStockModel()
+            {
+                Price = 1,
+                Quantity = 1,
+                Type = StockType.Bond
+            };
+
+            var request2 = new BaseStockModel()
+            {
+                Price = 1,
+                Quantity = 1,
+                Type = StockType.Bond
+            };
+
+            _fundService.AddStock(request0);
+            _fundService.AddStock(request1);
+            _fundService.AddStock(request2);
+
+            var allStocks = _fundService.AllStocks().ToArray();
+
+            AssertEvents(3);
+
+            AssertStocksLength(allStocks, 3);
+            AssertTotalMarketValueInStock(allStocks[0], new[] { request0, request1, request2 });
+
+            var allTotals = _fundService.AllTotals().ToArray();
+
+            Assert.That(allTotals.Length, Is.EqualTo(3));
+            Assert.That(allTotals.Count(t => t.Type == null), Is.EqualTo(1));
+            Assert.That(allTotals.Count(t => t.Type == StockType.Bond), Is.EqualTo(1));
+            Assert.That(allTotals.Count(t => t.Type == StockType.Equity), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void AddThreeStocksCheckTotalsSuccess()
+        {
+            var request0 = new BaseStockModel()
+            {
+                Price = 1,
+                Quantity = 100,
+                Type = StockType.Equity
+            };
+            var request1 = new BaseStockModel()
+            {
+                Price = 10,
+                Quantity = 10,
+                Type = StockType.Bond
+            };
+
+            var request2 = new BaseStockModel()
+            {
+                Price = 1000,
+                Quantity = 1,
+                Type = StockType.Bond
+            };
+
+            _fundService.AddStock(request0);
+            _fundService.AddStock(request1);
+            _fundService.AddStock(request2);
+
+            var allStocks = _fundService.AllStocks().ToArray();
+
+            AssertEvents(3);
+
+            AssertStocksLength(allStocks, 3);
+            AssertTotalMarketValueInStock(allStocks[0], new[] {request0, request1, request2});
+           
+            var allTotals = _fundService.AllTotals().ToArray();
+
+            AssertTotalsNumber(allTotals);
+        }
+
+        private void AssertEvents(int expectedNumberOfEvents)
+        {
+            _eventAggregatorMock.VerifyGetEvent(expectedNumberOfEvents);
+            _fundChangedEventMock.VerifyPublishEvent(expectedNumberOfEvents);
+        }
+
+        private void AssertStocksLength(IEnumerable<StockModel> stocks, int expectedLength)
+        {
+            Assert.That(stocks.Count(), Is.EqualTo(expectedLength));
+        }
+
+        private void AssertTotalMarketValueInStock(StockModel stock, IEnumerable<BaseStockModel> requests)
+        {
+            Assert.That(stock.TotalMarketValue, Is.EqualTo(requests.Sum(s => s.Price * s.Quantity)));
+        }
+
+        private void AssertTotalsNumber(IEnumerable<TotalStocksModel> totals)
+        {
+            Assert.That(totals.Count(), Is.EqualTo(3));
+            Assert.That(totals.Count(t => t.Type == null), Is.EqualTo(1));
+            Assert.That(totals.Count(t => t.Type == StockType.Bond), Is.EqualTo(1));
+            Assert.That(totals.Count(t => t.Type == StockType.Equity), Is.EqualTo(1));
         }
     }
 }

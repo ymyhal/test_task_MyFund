@@ -7,7 +7,7 @@ namespace MyFund.Modules.Stock.Stocks
     {
         IEventAggregator EventAggregator { get; }
 
-        StockType StockType { get; }
+        StockType Type { get; }
         string Name { get; }
         decimal Price { get; }
         int Quantity { get; }

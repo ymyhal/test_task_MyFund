@@ -56,9 +56,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="AddStock\AddStockViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FundServiceTests.cs" />
+    <Compile Include="Stocks\StockItemTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyFund.Infrastructure.Tests\MyFund.Infrastructure.Tests.csproj">

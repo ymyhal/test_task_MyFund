@@ -18,7 +18,7 @@ namespace MyFund.Modules.Stock.Stocks
             Populate(stock);
         }
 
-        public StockType StockType { get; private set; }
+        public StockType Type { get; private set; }
         public string Name { get; private set; }
         public decimal Price { get; private set; }
         public int Quantity { get; private set; }
@@ -29,7 +29,7 @@ namespace MyFund.Modules.Stock.Stocks
 
         private void Populate(StockModel stock)
         {
-            StockType = stock.Type;
+            Type = stock.Type;
             Name = stock.Name;
             Price = stock.Price;
             Quantity = stock.Quantity;

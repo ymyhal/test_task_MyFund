@@ -82,8 +82,6 @@
     <Compile Include="Fund\IFundViewModel.cs" />
     <Compile Include="Stocks\IStockItem.cs" />
     <Compile Include="Stocks\StockItem.cs" />
-    <Compile Include="Controllers\IStockController.cs" />
-    <Compile Include="Controllers\StockController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FundService.cs" />
     <Compile Include="Stocks\IStocksViewModel.cs" />
