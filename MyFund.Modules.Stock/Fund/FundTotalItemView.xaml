@@ -1,0 +1,96 @@
+﻿<UserControl x:Class="MyFund.Modules.Stock.Fund.FundTotalItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MyFund.Modules.Stock.Fund"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance local:FundTotalItem}">
+    <Grid x:Name="TotalItem"
+          Margin="0,20,0,0">
+            <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+            <Border Grid.RowSpan="6" 
+                    Grid.ColumnSpan="2" 
+                    CornerRadius="9" 
+                    BorderThickness="1"
+                    BorderBrush="Black"
+                    Background="LightGray"
+                    Opacity="0.85"/>
+        
+            <Border Grid.Row="0" Grid.Column="0"
+                    CornerRadius="9"
+                    BorderThickness="1"
+                    BorderBrush="Black"
+                    Margin="10,-10,10,0"
+                    Width="Auto"
+                    Background="LightGray" Padding="3">
+                    <TextBlock HorizontalAlignment="Center"
+                            Text="{Binding Path=Type, TargetNullValue=Total}" 
+                            Style="{StaticResource TextBlockTotalTitle}"/>
+            </Border>
+
+        <TextBlock Grid.Row="1"
+                   HorizontalAlignment="Right" 
+                   Width="Auto" 
+                   Height="Auto" 
+                   Text="Number:" 
+                   Foreground="#FF444444" 
+                   VerticalAlignment="Center" 
+                   Margin="10,5,0,5" />
+        <TextBlock Grid.Row="1" Grid.Column="1"
+                   HorizontalAlignment="Left" 
+                   Width="Auto" 
+                   Height="Auto" 
+                   Text="{Binding Path=Number, StringFormat=N0}" 
+                   Foreground="#FF444444" 
+                   VerticalAlignment="Center" 
+                   Margin="10,5,0,5" />
+
+        <TextBlock Grid.Row="2"
+                   HorizontalAlignment="Right" 
+                   Width="Auto" 
+                   Height="Auto" 
+                   Text="Stock Weight:" 
+                   Foreground="#FF444444" 
+                   VerticalAlignment="Center" 
+                   Margin="10,5,0,5" />
+        <TextBlock Grid.Row="2" Grid.Column="1"
+                   HorizontalAlignment="Left" 
+                   Width="Auto" 
+                   Height="Auto" 
+                   Text="{Binding Path=StockWeight, StringFormat=N4}" 
+                   Foreground="#FF444444" 
+                   VerticalAlignment="Center" 
+                   Margin="10,5,0,5" />
+
+        <TextBlock Grid.Row="3"
+                   HorizontalAlignment="Right" 
+                   Width="Auto" 
+                   Height="Auto" 
+                   Text="Market Value:" 
+                   Foreground="#FF444444" 
+                   VerticalAlignment="Center" 
+                   Margin="10,5,0,5" />
+        <TextBlock Grid.Row="3" Grid.Column="1"
+                   HorizontalAlignment="Left" 
+                   Width="Auto" 
+                   Height="Auto" 
+                   Text="{Binding Path=MarketValue, StringFormat=N0}" 
+                   Foreground="#FF444444" 
+                   VerticalAlignment="Center" 
+                   Margin="10,5,0,5" />
+    </Grid>
+</UserControl>
