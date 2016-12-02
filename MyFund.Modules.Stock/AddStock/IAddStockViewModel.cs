@@ -14,5 +14,7 @@ namespace MyFund.Modules.Stock.AddStock
         StockType StockTypeSelected { get; set; }
         decimal Price { get; set; }
         int Quantity { get; set; }
+        bool HasErrors { get; }
+        IEnumerable<string> Errors { get; }
     }
 }

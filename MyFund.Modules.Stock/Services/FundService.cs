@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using MyFund.Infrastructure.Enums;
@@ -18,10 +17,8 @@ namespace MyFund.Modules.Stock.Services
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class FundService : BaseService, IFundService
     {
-        private static object obj1 = new object();
-
-        private readonly ConcurrentBag<StockModel> _stocks = new ConcurrentBag<StockModel>();
-        private readonly ConcurrentBag<TotalStocksModel> _totals = new ConcurrentBag<TotalStocksModel>()
+        private readonly IList<StockModel> _stocks = new List<StockModel>();
+        private readonly IList<TotalStocksModel> _totals = new List<TotalStocksModel>()
         {
             new TotalStocksModel() {Type = null },
             new TotalStocksModel() {Type = StockType.Equity},
@@ -116,30 +113,26 @@ namespace MyFund.Modules.Stock.Services
             _stocks.Add(stock);
 
             // increasinfg number of specific stocks
-
-            lock (obj1) // using lock there due to Interlocked doesn't support decimals
+            switch (stock.Type)
             {
-                switch (stock.Type)
-                {
-                    case (StockType.Equity):
-                        _numberEquities++;
-                        _numberCurrent = _numberEquities;
-                        _marketValueEquities = _marketValueEquities + stock.Price*stock.Quantity;
-                        break;
-                    case (StockType.Bond):
-                        _numberBonds++;
-                        _numberCurrent = _numberBonds;
-                        _marketValueBonds = _marketValueBonds + stock.Price*stock.Quantity;
-                        break;
-                    default:
-                        throw new InvalidOperationException($"Not supported Stock Type {stock.Type}.");
-                }
-
-                _numberTotal = _numberEquities + _numberBonds;
-                _marketValueTotal = _marketValueEquities + _marketValueBonds;
-                _stockWeightEquities = _marketValueEquities * 100 / _marketValueTotal;
-                _stockWeightBonds = _marketValueBonds * 100 / _marketValueTotal;
+                case (StockType.Equity):
+                    _numberEquities++;
+                    _numberCurrent = _numberEquities;
+                    _marketValueEquities = _marketValueEquities + stock.Price*stock.Quantity;
+                    break;
+                case (StockType.Bond):
+                    _numberBonds++;
+                    _numberCurrent = _numberBonds;
+                    _marketValueBonds = _marketValueBonds + stock.Price*stock.Quantity;
+                    break;
+                default:
+                    throw new InvalidOperationException($"Not supported Stock Type {stock.Type}.");
             }
+
+            _numberTotal = _numberEquities + _numberBonds;
+            _marketValueTotal = _marketValueEquities + _marketValueBonds;
+            _stockWeightEquities = _marketValueEquities * 100 / _marketValueTotal;
+            _stockWeightBonds = _marketValueBonds * 100 / _marketValueTotal;
 
             // Updating stocks
             foreach (var stockModel in _stocks)

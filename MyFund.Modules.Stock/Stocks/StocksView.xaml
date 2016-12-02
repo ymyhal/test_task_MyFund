@@ -20,7 +20,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <TextBlock Text="STOCKS" Style="{StaticResource TextBlockSectionTitle}"/>
@@ -32,8 +32,9 @@
                   Margin="10,0,15,20"
                   IsReadOnly="True"
                   Opacity="0.85"
+                  Height="Auto"
                   Background="LightGray"
-                  Height="Auto">
+                  VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Type" Binding="{Binding Path=Type}" IsReadOnly="True" Width="*" />
                 <DataGridTemplateColumn Header="Name" Width="*">

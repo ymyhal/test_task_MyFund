@@ -3,3 +3,8 @@
 ################################################################################
 
 /MyFund.Modules.Stock.Tests/obj/Debug/build.force
+/MyFund/bin/Debug/MyFund.exe.config
+/MyFund.Infrastructure.Tests/obj/Debug/build.force
+/MyFund.Modules.Stock/obj/Debug/build.force
+/MyFund/obj/Debug/build.force
+/MyFund/obj/Debug/MyFund.csproj.FileListAbsolute.txt

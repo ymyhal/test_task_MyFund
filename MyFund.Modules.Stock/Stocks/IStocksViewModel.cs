@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Prism.Events;
 
 namespace MyFund.Modules.Stock.Stocks
@@ -6,7 +7,7 @@ namespace MyFund.Modules.Stock.Stocks
     public interface IStocksViewModel
     {
         IEventAggregator EventAggregator { get; }
-        ObservableCollection<StockItem> Stocks { get; }
+        IEnumerable<StockItem> Stocks { get; }
         void OnFundChanged();
     }
 }
