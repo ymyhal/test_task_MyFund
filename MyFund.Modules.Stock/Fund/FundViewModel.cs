@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using MyFund.Infrastructure.Events;
@@ -25,12 +25,12 @@ namespace MyFund.Modules.Stock.Fund
             EventAggregator.GetEvent<FundChangedEvent>().Subscribe(OnFundChanged, false);
         }
 
-        public ObservableCollection<IFundTotalItem> FundSummaryItems { get; private set; }
+        public IEnumerable<IFundTotalItem> FundSummaryItems { get; private set; }
 
         public void OnFundChanged()
         {
             var fundTotalItems = _fundService.AllTotals().Select(s => _stockConverter.Convert(EventAggregator, s));
-            FundSummaryItems = new ObservableCollection<IFundTotalItem>(fundTotalItems);
+            FundSummaryItems = new List<IFundTotalItem>(fundTotalItems);
             OnPropertyChanged(() => FundSummaryItems);
         }
     }
